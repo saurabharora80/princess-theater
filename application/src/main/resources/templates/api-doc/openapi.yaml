@@ -1,0 +1,27 @@
+openapi: 3.0.2
+
+info:
+  description: "{{applicationTitle}}"
+  version: "{{applicationVersion}} ({{commitId}})"
+  title: "{{applicationTitle}}"
+
+servers:
+  - url: "{{contextPath}}/"
+
+paths:
+  /movies:
+    get:
+      summary: Get Movies  with price from Cineworld and Filmworld
+      responses:
+        '200':
+          description: movies with prices
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Movies'
+components:
+  schemas:
+    Movies:
+      $ref: 'schema/movies.json'
+    Error:
+      $ref: 'schema/error.json'

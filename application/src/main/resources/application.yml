@@ -1,0 +1,6 @@
+server:
+  port: 8080 # TODO: change to the appropriate port (not needed for kubernetes deployments)
+  error:
+    include-stacktrace: never # Should be set to "never" in production environments. Unfortunately "on_trace_param" does not work with the Problem library, so we just ignore it.
+  servlet:
+    context-path: # TODO: change to the appropriate context path, if required (not needed for kubernetes deployments)

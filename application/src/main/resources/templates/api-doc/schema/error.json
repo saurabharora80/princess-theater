@@ -1,0 +1,78 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://example.com/root.json",
+  "type": "object",
+  "title": "The Root Schema",
+  "properties": {
+    "type": {
+      "$id": "#/properties/type",
+      "type": "string",
+      "title": "The Type Schema",
+      "default": "",
+      "examples": [
+        "ClientError"
+      ]
+    },
+    "title": {
+      "$id": "#/properties/title",
+      "type": "string",
+      "title": "The Title Schema",
+      "default": "",
+      "examples": [
+        "I don't care"
+      ]
+    },
+    "status": {
+      "$id": "#/properties/status",
+      "type": "integer",
+      "title": "The Status Schema",
+      "default": 0,
+      "examples": [
+        404
+      ]
+    },
+    "detail": {
+      "$id": "#/properties/detail",
+      "type": "string",
+      "title": "The Detail Schema",
+      "default": "",
+      "examples": [
+        "Content not found"
+      ]
+    },
+    "violations": {
+      "$id": "#/properties/violations",
+      "type": "array",
+      "title": "The Violations Schema",
+      "items": {
+        "$id": "#/properties/violations/items",
+        "type": "object",
+        "title": "The Items Schema",
+        "required": [
+          "field",
+          "message"
+        ],
+        "properties": {
+          "field": {
+            "$id": "#/properties/violations/items/properties/field",
+            "type": "string",
+            "title": "The Field Schema",
+            "default": "",
+            "examples": [
+              "getLandingPage.evaluate"
+            ]
+          },
+          "message": {
+            "$id": "#/properties/violations/items/properties/message",
+            "type": "string",
+            "title": "The Message Schema",
+            "default": "",
+            "examples": [
+              "evaluate should be numeric"
+            ]
+          }
+        }
+      }
+    }
+  }
+}
