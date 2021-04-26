@@ -4,3 +4,18 @@ server:
     include-stacktrace: never # Should be set to "never" in production environments. Unfortunately "on_trace_param" does not work with the Problem library, so we just ignore it.
   servlet:
     context-path: # TODO: change to the appropriate context path, if required (not needed for kubernetes deployments)
+
+upstream:
+  user-agent-header: platform-agent/ares
+  client:
+    lexicon:
+      connect-timeout-seconds: 3
+      read-write-timeout-seconds: 6
+      max-connection-idle-seconds: 90
+      max-in-memory-buffer-mb: 10
+      enable-micrometer-metric: false
+      resources:
+        cineworld:
+          max-connections: 200
+        filmworld:
+          max-connections: 200

@@ -1,0 +1,5 @@
+upstream:
+  client:
+    lexicon:
+      endpoint: http://localhost:9090/
+

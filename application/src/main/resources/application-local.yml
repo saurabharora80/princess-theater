@@ -1,0 +1,9 @@
+upstream:
+  client:
+    lexicon:
+      resources:
+        cinemworld:
+          endpoint: https://challenge.lexicondigital.com.au/api/v2/cinemworld/movies
+        filmmworld:
+          endpoint: https://challenge.lexicondigital.com.au/api/v2/filmmworld/movies
+

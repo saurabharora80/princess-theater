@@ -1,4 +1,4 @@
-package uk.co.agilesoftware.config;
+package uk.co.agilesoftware.config.beans;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.DeserializationFeature;
