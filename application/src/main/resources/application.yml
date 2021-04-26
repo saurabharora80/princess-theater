@@ -5,6 +5,14 @@ server:
   servlet:
     context-path: # TODO: change to the appropriate context path, if required (not needed for kubernetes deployments)
 
+logging:
+  path: /var/log/${project.name}
+  level:
+    uk.co.agilesoftware: info
+    reactor.netty.http.client: error
+    io.netty: error
+    reactor.core.publisher.Operators: error
+
 upstream:
   user-agent-header: platform-agent/ares
   client:
@@ -14,6 +22,7 @@ upstream:
       max-connection-idle-seconds: 90
       max-in-memory-buffer-mb: 10
       enable-micrometer-metric: false
+      api-key: Yr2636E6BTD3UCdleMkf7UEdqKnd9n361TQL9An7 # this should ideally come from a secrets manager
       resources:
         cineworld:
           max-connections: 200

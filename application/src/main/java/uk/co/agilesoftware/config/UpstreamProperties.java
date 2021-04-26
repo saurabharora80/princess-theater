@@ -1,5 +1,6 @@
 package uk.co.agilesoftware.config;
 
+import io.vavr.control.Option;
 import lombok.ToString;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -94,6 +95,8 @@ public class UpstreamProperties {
 
         private BasicHttpClientConfig fallbackConfig;
 
+        private String apiKey;
+
         @Override
         public Integer getMaxConnections() {
             return getWithFallback(BasicHttpClientConfig::getMaxConnections,
@@ -165,6 +168,16 @@ public class UpstreamProperties {
 
         public void setEnableMicrometerMetric(Boolean enableMicrometerMetric) {
             this.enableMicrometerMetric = enableMicrometerMetric;
+        }
+
+        public String getApiKey() {
+            return Option.of(apiKey)
+                    .filter(k -> !k.trim().isEmpty())
+                    .getOrElseThrow(() -> new RuntimeException("Provide api-key"));
+        }
+
+        public void setApiKey(String apiKey) {
+            this.apiKey = apiKey;
         }
 
         protected <X, T> T getWithFallback(Function<X, T> fallback, T primaryValue, T defaultValue, X config) {

@@ -28,13 +28,21 @@ public class ServiceBeans {
     }
 
     @Bean
-    public LexiconMovieConnector cineworldConnector(WebClientCreator webClientCreator) {
-        return new LexiconMovieConnector(webClientCreator.createClient("lexicon", "cineworld"));
+    public LexiconMovieConnector cineworldConnector(WebClientCreator webClientCreator,
+                                                    UpstreamProperties upstreamProperties) {
+        return new LexiconMovieConnector(
+                webClientCreator.createClient("lexicon", "cineworld"),
+                upstreamProperties.getClient("lexicon").getApiKey()
+        );
     }
 
     @Bean
-    public LexiconMovieConnector filmworldConnector(WebClientCreator webClientCreator) {
-        return new LexiconMovieConnector(webClientCreator.createClient("lexicon", "filmworld"));
+    public LexiconMovieConnector filmworldConnector(WebClientCreator webClientCreator,
+                                                    UpstreamProperties upstreamProperties) {
+        return new LexiconMovieConnector(
+                webClientCreator.createClient("lexicon", "filmworld"),
+                upstreamProperties.getClient("lexicon").getApiKey()
+        );
     }
 
     @Bean

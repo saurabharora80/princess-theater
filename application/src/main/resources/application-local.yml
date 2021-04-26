@@ -1,9 +1,14 @@
+logging:
+  path: target
+  level:
+    uk.co.agilesoftware: debug
+
 upstream:
   client:
     lexicon:
       resources:
         cinemworld:
-          endpoint: https://challenge.lexicondigital.com.au/api/v2/cinemworld/movies
+          endpoint: https://challenge.lexicondigital.com.au/api/v2/cinemworld
         filmmworld:
-          endpoint: https://challenge.lexicondigital.com.au/api/v2/filmmworld/movies
+          endpoint: https://challenge.lexicondigital.com.au/api/v2/filmmworld
 
