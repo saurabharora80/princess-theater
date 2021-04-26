@@ -1,0 +1,109 @@
+@startuml
+skinparam defaultFontName Helvetica
+skinparam shadowing false
+
+skinparam Sequence {
+    LifeLineBorderColor #344A55
+
+    Arrow {
+        Color           #E41A54
+        FontSize        15
+        FontColor       #344A55
+    }
+
+    Box {
+        BorderColor      #0d0f19
+        BackgroundColor  #0d0f19
+        FontSize         10
+        FontColor       #fff
+    }
+
+    Group {
+        BorderColor     #344A55
+        BackgroundColor #E2EBEF
+        FontColor       #344A55
+    }
+
+    Participant {
+        BackgroundColor #344A55
+        BorderColor     #344A55
+        FontColor       #fff
+        FontSize        14
+    }
+
+    Actor {
+        BackgroundColor #344A55
+        BorderColor     #344A55
+        FontColor       #344A55
+        FontSize        14
+    }
+
+    note {
+        BackgroundColor #E2EBEF
+        BorderColor     #E2EBEF
+        FontColor       #344A55
+        size            19
+    }
+}
+
+autonumber "00."
+
+actor "Client" as client
+participant "PrincessTheatre" as application
+participant "LexiconDigital" as lexicon
+
+client -> application: GET /movies
+par
+    application -> lexicon: GET /cineworld/movies {HEADERS [x-api-key: $value]}
+    application -> lexicon: GET /filmworld/movies {HEADERS [x-api-key: $value]}
+end
+alt successful case
+    lexicon -> application: GET /cineworld/movies 200 OK
+    lexicon -> application: GET /filmworld/movies 200 OK
+
+    application -> client: 200 OK [Movies]
+
+alt Cineworld failure
+    lexicon -> application: GET /cineworld/movies 4xx/5xx ERROR
+    note right: Log this fallback at: \nWARN if 5xx (expected and recoverable); \nERROR if 4xx (unexpected and recoverable)
+    lexicon -> application: GET /filmworld/movies 200 OK
+    alt Cineworld movies available in cache
+        application -> application: Use Cineworld Movies from cache
+        note right: Log this fallback at INFO (expected and recoverable)
+    else Cineworld movies cache stale expired
+        application -> application: Empty Cineworld movies
+        note right: Log this fallback at INFO (expected and recoverable)
+    end
+    application -> client: 200 OK [Movies]
+else Filmworld failure
+    lexicon -> application: GET /filmworld/movies 4xx/5xx ERROR
+    note right: Log this fallback at: \nWARN if 5xx (expected and recoverable); \nERROR if 4xx (unexpected and recoverable)
+    lexicon -> application: GET /cineworld/movies 200 OK
+    alt Filmworld movies available in cache
+        application -> application: Use Filmworld Movies from cache
+        note right: Log this fallback at INFO (expected and recoverable)
+    else Filmworld movies cache stale expired
+        application -> application: Empty Filmworld movies
+        note right: Log this fallback at INFO (expected and recoverable)
+    end
+    application -> client: 200 OK [Movies]
+else Both Failed
+    lexicon -> application: GET /filmworld/movies 4xx/5xx ERROR
+    note right: Log this fallback at: \nWARN if 5xx (expected and recoverable); \nERROR if 4xx (unexpected and recoverable)
+    lexicon -> application: GET /cineworld/movies 4xx/5xx ERROR
+    note right: Log this fallback at: \nWARN if 5xx (expected and recoverable); \nERROR if 4xx (unexpected and recoverable)
+    alt Movies available in cache
+        application -> application: Use Filmworld Movies from cache
+        note right: Log this fallback at INFO (expected and recoverable)
+        application -> application: Use Cineworld Movies from cache
+        note right: Log this fallback at INFO (expected and recoverable)
+    else Movies not available in cache
+        application -> application: Empty Filmworld movies
+        note right: Log this fallback at INFO (expected and recoverable)
+        application -> application: Empty Cineworld movies
+        note right: Log this fallback at INFO (expected and recoverable)
+    end
+    application -> client: 200 OK [Movies]
+end
+
+@enduml
