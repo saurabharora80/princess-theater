@@ -24,7 +24,7 @@ upstream:
       enable-micrometer-metric: false
       api-key: Yr2636E6BTD3UCdleMkf7UEdqKnd9n361TQL9An7 # this should ideally come from a secrets manager
       resources:
-        cineworld:
+        cinemaworld:
           max-connections: 200
         filmworld:
           max-connections: 200

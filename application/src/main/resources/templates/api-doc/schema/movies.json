@@ -8,9 +8,19 @@
   "examples": [
     [
       {
-        "title": "Star Wars: Episode VII",
-        "price": 25.0,
-        "actors": "Harrison Ford, Mark Hamill, Carrie Fisher, Adam Driver"
+        "title": "Star Wars: Episode VII - The Force Awakens",
+        "movies": [
+          {
+            "provider": "CinemaWorld",
+            "title": "Star Wars: Episode VII - The Force Awakens",
+            "price": 24.7
+          },
+          {
+            "provider": "FilmWorld",
+            "title": "Star Wars: Episode VII - The Force Awakens",
+            "price": 25
+          }
+        ]
       }
     ]
   ],
@@ -26,15 +36,24 @@
         "default": {},
         "examples": [
           {
-            "title": "Star Wars: Episode VII",
-            "price": 25.0,
-            "actors": "Harrison Ford, Mark Hamill, Carrie Fisher, Adam Driver"
+            "title": "Star Wars: Episode VII - The Force Awakens",
+            "movies": [
+              {
+                "provider": "CinemaWorld",
+                "title": "Star Wars: Episode VII - The Force Awakens",
+                "price": 24.7
+              },
+              {
+                "provider": "FilmWorld",
+                "title": "Star Wars: Episode VII - The Force Awakens",
+                "price": 25
+              }
+            ]
           }
         ],
         "required": [
           "title",
-          "price",
-          "actors"
+          "movies"
         ],
         "properties": {
           "title": {
@@ -44,28 +63,87 @@
             "description": "An explanation about the purpose of this instance.",
             "default": "",
             "examples": [
-              "Star Wars: Episode VII"
+              "Star Wars: Episode VII - The Force Awakens"
             ]
           },
-          "price": {
-            "$id": "#/items/anyOf/0/properties/price",
-            "type": "number",
-            "title": "The price schema",
+          "movies": {
+            "$id": "#/items/anyOf/0/properties/movies",
+            "type": "array",
+            "title": "The movies schema",
             "description": "An explanation about the purpose of this instance.",
-            "default": 0.0,
+            "default": [],
             "examples": [
-              25.0
-            ]
-          },
-          "actors": {
-            "$id": "#/items/anyOf/0/properties/actors",
-            "type": "string",
-            "title": "The actors schema",
-            "description": "An explanation about the purpose of this instance.",
-            "default": "",
-            "examples": [
-              "Harrison Ford, Mark Hamill, Carrie Fisher, Adam Driver"
-            ]
+              [
+                {
+                  "provider": "CinemaWorld",
+                  "title": "Star Wars: Episode VII - The Force Awakens",
+                  "price": 24.7
+                },
+                {
+                  "provider": "FilmWorld",
+                  "title": "Star Wars: Episode VII - The Force Awakens",
+                  "price": 25
+                }
+              ]
+            ],
+            "additionalItems": true,
+            "items": {
+              "$id": "#/items/anyOf/0/properties/movies/items",
+              "anyOf": [
+                {
+                  "$id": "#/items/anyOf/0/properties/movies/items/anyOf/0",
+                  "type": "object",
+                  "title": "The first anyOf schema",
+                  "description": "An explanation about the purpose of this instance.",
+                  "default": {},
+                  "examples": [
+                    {
+                      "provider": "CinemaWorld",
+                      "title": "Star Wars: Episode VII - The Force Awakens",
+                      "price": 24.7
+                    }
+                  ],
+                  "required": [
+                    "provider",
+                    "title",
+                    "price"
+                  ],
+                  "properties": {
+                    "provider": {
+                      "$id": "#/items/anyOf/0/properties/movies/items/anyOf/0/properties/provider",
+                      "type": "string",
+                      "title": "The provider schema",
+                      "description": "An explanation about the purpose of this instance.",
+                      "default": "",
+                      "examples": [
+                        "CinemaWorld"
+                      ]
+                    },
+                    "title": {
+                      "$id": "#/items/anyOf/0/properties/movies/items/anyOf/0/properties/title",
+                      "type": "string",
+                      "title": "The title schema",
+                      "description": "An explanation about the purpose of this instance.",
+                      "default": "",
+                      "examples": [
+                        "Star Wars: Episode VII - The Force Awakens"
+                      ]
+                    },
+                    "price": {
+                      "$id": "#/items/anyOf/0/properties/movies/items/anyOf/0/properties/price",
+                      "type": "number",
+                      "title": "The price schema",
+                      "description": "An explanation about the purpose of this instance.",
+                      "default": 0.0,
+                      "examples": [
+                        24.7
+                      ]
+                    }
+                  },
+                  "additionalProperties": true
+                }
+              ]
+            }
           }
         },
         "additionalProperties": true

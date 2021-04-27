@@ -3,4 +3,3 @@ upstream:
     lexicon:
       endpoint: http://localhost:9090
       api-key: api-key-value
-

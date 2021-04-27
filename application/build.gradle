@@ -36,9 +36,9 @@ dependencies {
 	runtimeOnly "org.cache2k:cache2k-core:2.0.0.Final"
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation('org.mockito:mockito-junit-jupiter')
+	testImplementation 'org.mockito:mockito-junit-jupiter'
 	testImplementation 'io.projectreactor:reactor-test'
-	testImplementation group: 'com.github.tomakehurst', name: 'wiremock-jre8', version: '2.27.2'
+	testImplementation 'com.github.tomakehurst:wiremock-jre8:2.27.2'
 }
 
 test {

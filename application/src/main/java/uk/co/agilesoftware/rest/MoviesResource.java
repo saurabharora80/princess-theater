@@ -7,7 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
-import uk.co.agilesoftware.upstream.model.Movie;
+import uk.co.agilesoftware.domain.CombinedMovie;
+import uk.co.agilesoftware.domain.CombinedMovies;
 import uk.co.agilesoftware.service.MovieService;
 
 @RestController
@@ -18,7 +19,7 @@ public class MoviesResource {
     private final MovieService movieService;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public Mono<List<Movie>> getMovies() {
-        return Mono.just(List.empty());
+    public Mono<List<CombinedMovie>> getMovies() {
+        return movieService.getCombinedMovies().map(CombinedMovies::get);
     }
 }

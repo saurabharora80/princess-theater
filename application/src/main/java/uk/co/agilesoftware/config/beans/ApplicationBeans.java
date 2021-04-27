@@ -8,7 +8,7 @@ import uk.co.agilesoftware.service.MovieService;
 import uk.co.agilesoftware.upstream.LexiconMovieConnector;
 
 @Configuration
-public class ServiceBeans {
+public class ApplicationBeans {
 
     @Bean
     public UpstreamProperties upstreamConfig() {
@@ -28,25 +28,26 @@ public class ServiceBeans {
     }
 
     @Bean
-    public LexiconMovieConnector cineworldConnector(WebClientCreator webClientCreator,
-                                                    UpstreamProperties upstreamProperties) {
-        return new LexiconMovieConnector(
-                webClientCreator.createClient("lexicon", "cineworld"),
-                upstreamProperties.getClient("lexicon").getApiKey()
-        );
+    public LexiconMovieConnector cinemaworldConnector(WebClientCreator webClientCreator,
+                                                      UpstreamProperties upstreamProperties) {
+        return getLexiconMovieConnector(webClientCreator, upstreamProperties, "cinemaworld");
     }
 
     @Bean
     public LexiconMovieConnector filmworldConnector(WebClientCreator webClientCreator,
                                                     UpstreamProperties upstreamProperties) {
-        return new LexiconMovieConnector(
-                webClientCreator.createClient("lexicon", "filmworld"),
+        return getLexiconMovieConnector(webClientCreator, upstreamProperties, "filmworld");
+    }
+
+    private LexiconMovieConnector getLexiconMovieConnector(WebClientCreator webClientCreator, UpstreamProperties upstreamProperties, String provider) {
+        return new LexiconMovieConnector(provider,
+                webClientCreator.createClient("lexicon", provider),
                 upstreamProperties.getClient("lexicon").getApiKey()
         );
     }
 
     @Bean
-    public MovieService movieService(LexiconMovieConnector cineworldConnector, LexiconMovieConnector filmworldConnector) {
-        return new MovieService(cineworldConnector, filmworldConnector);
+    public MovieService movieService(LexiconMovieConnector cinemaworldConnector, LexiconMovieConnector filmworldConnector) {
+        return new MovieService(cinemaworldConnector, filmworldConnector);
     }
 }
