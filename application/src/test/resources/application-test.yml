@@ -3,3 +3,5 @@ upstream:
     lexicon:
       endpoint: http://localhost:9090
       api-key: api-key-value
+      retry-attempts: 2
+      retry-delay-in-ms: 100

@@ -1,8 +1,10 @@
 package uk.co.agilesoftware.config;
 
 import io.vavr.control.Option;
+import lombok.Setter;
 import lombok.ToString;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import reactor.util.retry.RetrySpec;
 
 import java.util.Map;
 import java.util.Optional;
@@ -48,6 +50,10 @@ public class UpstreamProperties {
         Integer getMaxInMemoryBufferMb();
 
         Boolean getEnableMicrometerMetric();
+
+        Integer getRetryAttempts();
+
+        Integer getRetryDelayInMs();
     }
 
     @ToString
@@ -79,6 +85,10 @@ public class UpstreamProperties {
 
         public static final int DEFAULT_MAX_CONNECTION_IDLE_TTL_SECS = 90;
 
+        private static final Integer DEFAULT_RETRY_ATTEMPTS = 2;
+
+        private static final Integer DEFAULT_RETRY_DELAY_MS = 200;
+
         private Endpoint endpoint;
 
         private Integer connectTimeoutSeconds;
@@ -96,6 +106,12 @@ public class UpstreamProperties {
         private BasicHttpClientConfig fallbackConfig;
 
         private String apiKey;
+
+        @Setter
+        private Integer retryAttempts;
+
+        @Setter
+        private Integer retryDelayInMs;
 
         @Override
         public Integer getMaxConnections() {
@@ -178,6 +194,16 @@ public class UpstreamProperties {
 
         public void setApiKey(String apiKey) {
             this.apiKey = apiKey;
+        }
+
+        public Integer getRetryAttempts() {
+            return getWithFallback(BasicHttpClientConfig::getRetryAttempts,
+                    this.retryAttempts, DEFAULT_RETRY_ATTEMPTS, fallbackConfig);
+        }
+
+        public Integer getRetryDelayInMs() {
+            return getWithFallback(BasicHttpClientConfig::getRetryDelayInMs,
+                    this.retryDelayInMs, DEFAULT_RETRY_DELAY_MS, fallbackConfig);
         }
 
         protected <X, T> T getWithFallback(Function<X, T> fallback, T primaryValue, T defaultValue, X config) {

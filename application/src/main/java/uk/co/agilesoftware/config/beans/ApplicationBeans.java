@@ -7,6 +7,8 @@ import uk.co.agilesoftware.config.UpstreamProperties;
 import uk.co.agilesoftware.service.MovieService;
 import uk.co.agilesoftware.upstream.LexiconMovieConnector;
 
+import java.time.Duration;
+
 @Configuration
 public class ApplicationBeans {
 
@@ -40,9 +42,12 @@ public class ApplicationBeans {
     }
 
     private LexiconMovieConnector getLexiconMovieConnector(WebClientCreator webClientCreator, UpstreamProperties upstreamProperties, String provider) {
+        UpstreamProperties.HttpClientConfigs clientConfigs = upstreamProperties.getClient("lexicon");
         return new LexiconMovieConnector(provider,
                 webClientCreator.createClient("lexicon", provider),
-                upstreamProperties.getClient("lexicon").getApiKey()
+                clientConfigs.getApiKey(),
+                clientConfigs.getRetryAttempts(),
+                Duration.ofMillis(clientConfigs.getRetryDelayInMs())
         );
     }
 

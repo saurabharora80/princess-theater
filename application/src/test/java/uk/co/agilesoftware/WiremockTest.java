@@ -17,7 +17,7 @@ public class WiremockTest {
 
     @BeforeEach
     public void resetWiremock() {
-        wireMockServer.start();
+        wireMockServer.resetAll();
     }
 
     @AfterAll

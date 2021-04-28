@@ -32,26 +32,32 @@ public class LexiconLexiconMovieConnectorTest extends WiremockTest {
         StepVerifier.create(filmworldConnector.getMovies())
                 .expectNextMatches(actualMovies -> actualMovies.equals(expectedMovies))
                 .verifyComplete();
+
+        verify(1, getRequestedFor(urlPathEqualTo("/filmworld/movies")));
     }
 
     @Test
-    public void shouldFailIfUpstreamReturn4xx() {
+    public void shouldRetryBoforeFallingbackToEmptyIfUpstreamReturn4xx() {
         stubFor(get(urlPathEqualTo("/filmworld/movies")).withHeader("x-api-key", equalTo("api-key-value"))
                 .willReturn(aResponse().withStatus(403).withBody("{\"message\": \"Forbidden\"}")));
 
         StepVerifier.create(filmworldConnector.getMovies())
                 .expectComplete()
                 .verify();
+
+        verify(3, getRequestedFor(urlPathEqualTo("/filmworld/movies")));
     }
 
     @Test
-    public void shouldFailIfUpstreamReturn5xx() {
+    public void shouldFallbackToEmptyIfUpstreamReturn5xx() {
         stubFor(get(urlPathEqualTo("/filmworld/movies")).withHeader("x-api-key", equalTo("api-key-value"))
                 .willReturn(aResponse().withStatus(502)));
 
         StepVerifier.create(filmworldConnector.getMovies())
                 .expectComplete()
                 .verify();
+
+        verify(3, getRequestedFor(urlPathEqualTo("/filmworld/movies")));
     }
 
 }
