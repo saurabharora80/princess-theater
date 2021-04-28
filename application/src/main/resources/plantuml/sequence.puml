@@ -66,43 +66,22 @@ alt successful case
 alt Cineworld failure
     lexicon -> application: GET /cineworld/movies 4xx/5xx ERROR
     note right: Log this fallback at: \nWARN if 5xx (expected and recoverable); \nERROR if 4xx (unexpected and recoverable)
+    application -> application: Fallback on Empty list for Cinemaworld movies
     lexicon -> application: GET /filmworld/movies 200 OK
-    alt Cineworld movies available in cache
-        application -> application: Use Cineworld Movies from cache
-        note right: Log this fallback at INFO (expected and recoverable)
-    else Cineworld movies cache stale expired
-        application -> application: Empty Cineworld movies
-        note right: Log this fallback at INFO (expected and recoverable)
-    end
     application -> client: 200 OK [Movies]
 else Filmworld failure
     lexicon -> application: GET /filmworld/movies 4xx/5xx ERROR
     note right: Log this fallback at: \nWARN if 5xx (expected and recoverable); \nERROR if 4xx (unexpected and recoverable)
+    application -> application: Fallback on Empty list for Filmworld movies
     lexicon -> application: GET /cineworld/movies 200 OK
-    alt Filmworld movies available in cache
-        application -> application: Use Filmworld Movies from cache
-        note right: Log this fallback at INFO (expected and recoverable)
-    else Filmworld movies cache stale expired
-        application -> application: Empty Filmworld movies
-        note right: Log this fallback at INFO (expected and recoverable)
-    end
     application -> client: 200 OK [Movies]
 else Both Failed
     lexicon -> application: GET /filmworld/movies 4xx/5xx ERROR
     note right: Log this fallback at: \nWARN if 5xx (expected and recoverable); \nERROR if 4xx (unexpected and recoverable)
+    application -> application: Fallback on Empty list for Filmworld movies
     lexicon -> application: GET /cineworld/movies 4xx/5xx ERROR
     note right: Log this fallback at: \nWARN if 5xx (expected and recoverable); \nERROR if 4xx (unexpected and recoverable)
-    alt Movies available in cache
-        application -> application: Use Filmworld Movies from cache
-        note right: Log this fallback at INFO (expected and recoverable)
-        application -> application: Use Cineworld Movies from cache
-        note right: Log this fallback at INFO (expected and recoverable)
-    else Movies not available in cache
-        application -> application: Empty Filmworld movies
-        note right: Log this fallback at INFO (expected and recoverable)
-        application -> application: Empty Cineworld movies
-        note right: Log this fallback at INFO (expected and recoverable)
-    end
+    application -> application: Fallback on Empty list for Cinemaworld movies
     application -> client: 200 OK [Movies]
 end
 
