@@ -22,5 +22,6 @@ Available at http://localhost:8080/ and http://localhost:8080/api-doc/index.html
 
 * Fallback on a *Cached* copy of Lexicon movies if Upstream requests fail 
     * Ideally via a transparent HTTP caching proxy like Nginx 
+* Move the api-key to a AWS or K8 secret manager       
  
   
